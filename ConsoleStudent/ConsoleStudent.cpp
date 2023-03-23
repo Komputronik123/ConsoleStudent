@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -13,86 +13,168 @@ int main() {
     string sName;
     string sSurname;
     int sAge;
+    int e;
 
     Student student;
 
+    do
+    {
+        int choice;
+        cout << " 1 add  " << endl;
+        cout << "2 edit " << endl;
+        cout << "3 delate" << endl;
+        cout << "4 preview" << endl;
+        cin >> choice;
 
-    int choice;
-    cout << " 1 zeby dodac  " << endl;           
-    cout << "2 zeby edytowac: " << endl;
-    cout << "3 zeby usunac" << endl;
-    cin >> choice;
 
-    
-    
-        if (choice == 1) {
-            cout << "podaj imnie" << endl;
+
+        if (choice == 1) // add +
+        {
+            cout << "give me a name" << endl;
             cin >> sName;
-            cout << "podaj nazwisko" << endl;
+            cout << "give me a suranme" << endl;
             cin >> sSurname;
-            cout << "podaj wiek" <<  endl;
+            cout << "give me a age" << endl;
             cin >> sAge;
-            ofstream zapis("student.txt");
+    
 
-            zapis << sName << " , ";
-            zapis << sSurname << " , ";
-            zapis << sAge << " , " << endl;
+           
+          
+               
+                ofstream foutput;
+                ifstream finput;
+                finput.open("student.txt");
+                foutput.open("student.txt", ios::app);
 
+                if (finput.is_open())
+                    foutput << sName << " " << sSurname << " " << sAge << endl;
 
-            zapis.close();
+                
 
-
-
-        }
-        else if (choice == 2) {
-            fstream edit;
-            edit.open("student.txt");
-            string linia;
-            do
-            {
-                getline(edit, linia);
-                cout << linia << endl;
-            } while (linia != "");
-
-            edit.close();
-
-            cout << "podaj inne dane" << endl;
-
-
-
+                finput.close();
+                foutput.close();
+            
+            
 
 
         }
+        else if (choice == 2) {  //edit
+                string edit;
+                string line;
+                vector<string> lines;
 
+                ifstream fin("student.txt");
+                ofstream temp("temp.txt");
 
-
-        else if (choice == 3) {
-            std::ifstream file_in("student.txt");
-            std::ofstream file_out("temp.txt");
-            std::string line;
-            int line_number = 1; // numer linii do usunięcia
-
-            int current_line_number = 1;
-            while (std::getline(file_in, line)) {
-                if (current_line_number != line_number) {
-                    file_out << line << std::endl;
+                while (getline(fin, line)) {
+                    lines.push_back(line);
                 }
-                current_line_number++;
+                fin.close();
+
+                for (int i = 0; i < lines.size(); i++) {
+                    cout << i << ": " << lines[i] << endl;
+                }
+
+                cout << "Which line do you want to edit: ";
+                cin >> edit;
+
+                int index_to_edit = stoi(edit);
+            if (index_to_edit >= 0 && index_to_edit < lines.size()) {
+                cout << "Enter new data:" << endl;
+                cout << "Name: ";
+                cin >> sName;
+                cout << "Surname: ";
+                cin >> sSurname;
+                cout << "Age: ";
+                cin >> sAge;
+
+                lines[index_to_edit] = sName + " " + sSurname + " " + to_string(sAge);
             }
 
-            file_in.close();
-            file_out.close();
+                for (const auto& line : lines) {
+                    temp << line << endl;
+                }
+                temp.close();
 
-            
-            std::remove("student.txt");
-            std::rename("temp.txt", "student.txt");
-
-            return 0;
+                remove("student.txt");
+                rename("temp.txt", "student.txt");
         }
-            
-            
+        
 
-  }
+
+        
+        else if (choice == 3) { // delete
+            string deleteline;
+            string line;
+            vector<string> lines;
+
+            ifstream fin;
+            fin.open("student.txt");
+            ofstream temp;
+            temp.open("temp.txt");
+
+            
+            while (getline(fin, line)) {
+                lines.push_back(line);
+            }
+            fin.close();
+
+          
+            for (int i = 0; i < lines.size(); i++) {
+                cout << i << ": " << lines[i] << endl;
+            }
+
+          
+            cout << "Which line do you want to delete ";
+            cin >> deleteline;
+
+           
+            int index_to_delete = stoi(deleteline);
+            if (index_to_delete >= 0 && index_to_delete < lines.size()) {
+                lines.erase(lines.begin() + index_to_delete);
+            }
+
+         
+            for (const auto& line : lines) {
+                temp << line << endl;
+            }
+            temp.close();
+
+          
+            remove("student.txt");
+            rename("temp.txt", "student.txt");
+        }
+
+        else if (choice == 4) 
+        {    
+            string deleteline;
+            string line;
+            vector<string> lines;
+
+            ifstream fin;
+            fin.open("student.txt");
+            ofstream temp;
+            temp.open("temp.txt");
+
+
+            while (getline(fin, line)) {
+                lines.push_back(line);
+            }
+            fin.close();
+
+
+            for (int i = 0; i < lines.size(); i++) {
+                cout << i << ": " << lines[i] << endl;
+            }
+
+
+        }
+        cout << " 1) repeat" << endl;
+        cin >> e;
+    } while (e == 1);
+
+        return 0;
+}
     
 
     
